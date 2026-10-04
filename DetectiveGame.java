@@ -6,11 +6,7 @@ public class DetectiveGame {
 
         Scanner sc = new Scanner(System.in);
 
-        // Create objects
-        Suspect[] suspects = Suspect.getSuspects();
-
-        ClueManager clueManager = new ClueManager();
-
+        // Create Investigation object
         Investigation investigation = new Investigation();
 
         int choice;
@@ -37,7 +33,8 @@ public class DetectiveGame {
 
                 case 1:
 
-                    Suspect.displayAllSuspects(suspects);
+                    // Display all suspects
+                    Suspect.displayAllSuspects();
                     break;
 
                 case 2:
@@ -46,28 +43,33 @@ public class DetectiveGame {
 
                     int id = sc.nextInt();
 
-                    investigation.investigateSuspect(suspects, id);
+                    // Investigate selected suspect
+                    investigation.investigateSuspect(Suspect.suspects, id);
                     break;
 
                 case 3:
 
-                    clueManager.displayAvailableClues();
+                    // Display available clues
+                    ClueManager.displayClues();
 
                     System.out.print("Enter clue number to collect: ");
 
                     int clueNumber = sc.nextInt();
 
-                    clueManager.collectClue(clueNumber);
+                    // Collect selected clue
+                    ClueManager.collectClue(clueNumber);
                     break;
 
                 case 4:
 
-                    clueManager.displayCollectedClues();
+                    // Display collected clues
+                    ClueManager.displayCollectedClues();
                     break;
 
                 case 5:
 
-                    investigation.accuseSuspect(sc, suspects);
+                    // Accuse a suspect
+                    investigation.accuseSuspect(sc, Suspect.suspects);
                     break;
 
                 case 6:
@@ -82,6 +84,7 @@ public class DetectiveGame {
             }
         }
 
+        // Display final result
         if (investigation.isCaseSolved()) {
 
             System.out.println("\nThank you, Detective!");
