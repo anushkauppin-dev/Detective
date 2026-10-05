@@ -1,69 +1,157 @@
-public class ClueManager {
+import java.util.Scanner;
 
-    String[] clues = {
-        "Clue 1: A staff member saw someone near the department office.",
-        "Clue 2: A torn piece of paper was found near the office.",
-        "Clue 3: Security records show someone entered the office.",
-        "Clue 4: A witness noticed a suspicious person carrying documents.",
-        "Clue 5: The missing question paper was last seen in the department office."
-    };
+public class DetectiveGame {
 
-    boolean[] collected = new boolean[5];
+    public static void main(String[] args) {
 
-    // Display available clues
-    public void displayAvailableClues() {
+        Scanner scanner = new Scanner(System.in);
 
-        System.out.println("Available Clues:");
+        // Get suspects from Suspect class
+        Suspect[] suspects = Suspect.suspects;
 
-        for (int i = 0; i < clues.length; i++) {
+        // Create objects
+        ClueManager clueManager = new ClueManager();
 
-            if (!collected[i]) {
-                System.out.println((i + 1) + ". " + clues[i]);
+        Investigation investigation =
+                new Investigation(suspects);
+
+        boolean investigationOpen = true;
+
+        System.out.println("=================================");
+        System.out.println("   THE MISSING EXAM PAPER");
+        System.out.println("=================================");
+        System.out.println();
+
+        System.out.println(
+            "A question paper is missing from the department office."
+        );
+
+        System.out.println(
+            "Investigate the suspects, collect the clues, "
+            + "and name the culprit."
+        );
+
+        System.out.println("You have 3 accusation attempts.");
+        System.out.println();
+
+        // Main menu loop
+        do {
+
+            displayMenu();
+
+            System.out.print("Enter your choice: ");
+            int choice = scanner.nextInt();
+
+            System.out.println();
+
+            switch (choice) {
+
+                case 1:
+
+                    // View all suspects
+                    Suspect.displayAllSuspects();
+
+                    break;
+
+                case 2:
+
+                    // Investigate a suspect
+                    System.out.print(
+                        "Enter suspect ID to investigate: "
+                    );
+
+                    int investigateId = scanner.nextInt();
+
+                    System.out.println();
+
+                    investigation.investigateSuspect(
+                        investigateId
+                    );
+
+                    break;
+
+                case 3:
+
+                    // View available clues
+                    clueManager.displayAvailableClues();
+
+                    System.out.print(
+                        "Enter clue number to collect: "
+                    );
+
+                    int clueNumber = scanner.nextInt();
+
+                    System.out.println();
+
+                    clueManager.collectClue(clueNumber);
+
+                    break;
+
+                case 4:
+
+                    // View collected clues
+                    clueManager.displayCollectedClues();
+
+                    break;
+
+                case 5:
+
+                    // Accuse suspect
+                    System.out.print(
+                        "Enter suspect ID to accuse: "
+                    );
+
+                    int accuseId = scanner.nextInt();
+
+                    System.out.println();
+
+                    if (investigation.accuseSuspect(accuseId)) {
+
+                        investigationOpen = false;
+                    }
+
+                    break;
+
+                case 6:
+
+                    // Exit
+                    System.out.println(
+                        "Investigation terminated."
+                    );
+
+                    investigationOpen = false;
+
+                    break;
+
+                default:
+
+                    System.out.println(
+                        "Invalid option. "
+                        + "Choose a number from 1 to 6."
+                    );
             }
-        }
+
+            System.out.println();
+
+        } while (investigationOpen);
+
+        scanner.close();
     }
 
-    // Collect a clue
-    public void collectClue(int clueNumber) {
+    // Display menu
+    public static void displayMenu() {
 
-        if (clueNumber < 1 || clueNumber > clues.length) {
+        System.out.println("=================================");
+        System.out.println("     DETECTIVE INVESTIGATION");
+        System.out.println("=================================");
 
-            System.out.println("Invalid clue number.");
-            return;
-        }
+        System.out.println("1. View Suspects");
+        System.out.println("2. Investigate Suspect");
+        System.out.println("3. Collect Clue");
+        System.out.println("4. View Collected Clues");
+        System.out.println("5. Accuse Suspect");
+        System.out.println("6. Exit");
 
-        int index = clueNumber - 1;
-
-        if (collected[index]) {
-
-            System.out.println("You have already collected this clue.");
-            return;
-        }
-
-        collected[index] = true;
-
-        System.out.println("Clue collected successfully!");
-        System.out.println(clues[index]);
-    }
-
-    // Display collected clues
-    public void displayCollectedClues() {
-
-        System.out.println("Collected Clues:");
-
-        boolean found = false;
-
-        for (int i = 0; i < clues.length; i++) {
-
-            if (collected[i]) {
-
-                System.out.println((i + 1) + ". " + clues[i]);
-                found = true;
-            }
-        }
-
-        if (!found) {
-            System.out.println("No clues collected yet.");
-        }
+        System.out.println("=================================");
     }
 }
