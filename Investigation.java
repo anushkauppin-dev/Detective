@@ -1,77 +1,73 @@
-import java.util.Scanner;
+class Investigation {
+    private Suspect[] suspects;
+    private int culpritId;
+    private int attemptsUsed;
 
-public class Investigation {
+    public Investigation(Suspect[] suspects) {
+        this.suspects = suspects;
+        this.culpritId = 5;
+        this.attemptsUsed = 0;
+    }
 
-    private int attempts = 0;
-    private boolean caseSolved = false;
-    private boolean investigationOver = false;
+    public Suspect searchById(int suspectId) {
+        Suspect found = null;
 
-    private int actualCulprit = 5;
-
-    public void investigateSuspect(Suspect[] suspects, int id) {
-
-        for (Suspect suspect : suspects) {
-
-            if (suspect.suspectId == id) {
-                suspect.displaySuspect();
-                return;
+        for (int i = 0; i < suspects.length; i++) {
+            if (suspects[i].getSuspectId() == suspectId) {
+                found = suspects[i];
+                break;
             }
         }
 
-        System.out.println("Suspect not found.");
+        return found;
     }
 
-    public void accuseSuspect(Scanner sc, Suspect[] suspects) {
+    public void investigateSuspect(int suspectId) {
+        Suspect suspect = searchById(suspectId);
 
-        if (investigationOver) {
-            System.out.println("Investigation is already over.");
+        if (suspect == null) {
+            System.out.println("No suspect found with ID " + suspectId + ".");
             return;
         }
 
-        if (attempts >= 3) {
+        System.out.println("----- INVESTIGATION REPORT -----");
+        suspect.displayDetails();
+    }
+
+    public boolean accuseSuspect(int suspectId) {
+        if (attemptsUsed >= 3) {
+            System.out.println("INVESTIGATION FAILED!");
             System.out.println("You have used all three attempts.");
-            investigationOver = true;
-            return;
+            System.out.println("The culprit escaped.");
+            return true;
         }
 
-        System.out.print("Enter suspect ID to accuse: ");
-        int accusedId = sc.nextInt();
+        Suspect accused = searchById(suspectId);
+        if (accused == null) {
+            System.out.println("No suspect found with ID " + suspectId + ".");
+            System.out.println("This accusation was not counted.");
+            return false;
+        }
 
-        attempts++;
-
-        if (accusedId == actualCulprit) {
-
-            caseSolved = true;
-            investigationOver = true;
-
-            System.out.println("\nCASE SOLVED!");
+        if (accused.getSuspectId() == culpritId) {
+            System.out.println("CASE SOLVED!");
             System.out.println("You identified the culprit.");
             System.out.println("The missing question paper has been recovered.");
-
-        } else {
-
-            System.out.println("Incorrect accusation.");
-
-            if (attempts < 3) {
-                System.out.println(
-                    "You have " + (3 - attempts) + " attempt(s) remaining."
-                );
-            } else {
-
-                investigationOver = true;
-
-                System.out.println("\nINVESTIGATION FAILED!");
-                System.out.println("You have used all three attempts.");
-                System.out.println("The culprit escaped.");
-            }
+            System.out.println("Culprit: " + accused.getName());
+            return true;
         }
-    }
 
-    public boolean isCaseSolved() {
-        return caseSolved;
-    }
+        attemptsUsed++;
+        System.out.println(accused.getName() + " is not the culprit.");
+        System.out.println("Attempts used: " + attemptsUsed + " of 3.");
 
-    public boolean isInvestigationOver() {
-        return investigationOver;
+        if (attemptsUsed == 3) {
+            System.out.println("INVESTIGATION FAILED!");
+            System.out.println("You have used all three attempts.");
+            System.out.println("The culprit escaped.");
+            return true;
+        }
+
+        return false;
     }
 }
