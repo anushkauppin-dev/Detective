@@ -1,57 +1,69 @@
-class ClueManager {
-    private String[] clues;
-    private boolean[] collected;
+public class ClueManager {
 
-    public ClueManager() {
-        clues = new String[5];
-        clues[0] = "The office door was opened at 2:15 PM.";
-        clues[1] = "CCTV shows someone entering the office.";
-        clues[2] = "A torn piece of paper was found near the printer.";
-        clues[3] = "A suspect's ID card was found inside the office.";
-        clues[4] = "The printer was used shortly before the question paper disappeared.";
+    String[] clues = {
+        "Clue 1: A staff member saw someone near the department office.",
+        "Clue 2: A torn piece of paper was found near the office.",
+        "Clue 3: Security records show someone entered the office.",
+        "Clue 4: A witness noticed a suspicious person carrying documents.",
+        "Clue 5: The missing question paper was last seen in the department office."
+    };
 
-        collected = new boolean[clues.length];
-    }
+    boolean[] collected = new boolean[5];
 
+    // Display available clues
     public void displayAvailableClues() {
-        System.out.println("----- AVAILABLE CLUES -----");
+
+        System.out.println("Available Clues:");
+
         for (int i = 0; i < clues.length; i++) {
-            String status = collected[i] ? "Collected" : "Not collected";
-            System.out.println((i + 1) + ". " + clues[i] + " [" + status + "]");
+
+            if (!collected[i]) {
+                System.out.println((i + 1) + ". " + clues[i]);
+            }
         }
     }
 
+    // Collect a clue
     public void collectClue(int clueNumber) {
+
         if (clueNumber < 1 || clueNumber > clues.length) {
-            System.out.println("Invalid clue number. Choose a number from 1 to " + clues.length + ".");
+
+            System.out.println("Invalid clue number.");
             return;
         }
 
         int index = clueNumber - 1;
+
         if (collected[index]) {
-            System.out.println("Clue " + clueNumber + " has already been collected.");
-            System.out.println("A clue cannot be collected more than once.");
+
+            System.out.println("You have already collected this clue.");
             return;
         }
 
         collected[index] = true;
-        System.out.println("Clue collected: " + clues[index]);
+
+        System.out.println("Clue collected successfully!");
+        System.out.println(clues[index]);
     }
 
+    // Display collected clues
     public void displayCollectedClues() {
-        System.out.println("----- COLLECTED CLUES -----");
-        boolean anyCollected = false;
+
+        System.out.println("Collected Clues:");
+
+        boolean found = false;
 
         for (int i = 0; i < clues.length; i++) {
-            if (!collected[i]) {
-                continue;
+
+            if (collected[i]) {
+
+                System.out.println((i + 1) + ". " + clues[i]);
+                found = true;
             }
-            System.out.println((i + 1) + ". " + clues[i]);
-            anyCollected = true;
         }
 
-        if (!anyCollected) {
-            System.out.println("No clues have been collected yet.");
+        if (!found) {
+            System.out.println("No clues collected yet.");
         }
     }
 }
